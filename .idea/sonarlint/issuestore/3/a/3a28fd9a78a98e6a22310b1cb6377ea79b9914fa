@@ -1,0 +1,9 @@
+
+«
+java:S4165;"jRemove this useless assignment; "googleAuthId" already holds the assigned value along all execution paths.(Ý¾öœýÿÿÿÿJ$4dc94dd0-22c6-40c2-a35b-cf0cee73d40e
+¥
+java:S4165:"dRemove this useless assignment; "avatar" already holds the assigned value along all execution paths.( ·®½ûÿÿÿÿJ$c1ee0bcd-5ac4-4cca-84e7-200dd24597b4
+p
+java:S1656:"/Remove or correct this useless self-assignment.( ·®½ûÿÿÿÿJ$31f250ed-d097-4e44-a4c0-23971cc65c82
+p
+java:S1656;"/Remove or correct this useless self-assignment.(Ý¾öœýÿÿÿÿJ$c4e54a8b-821c-4f1f-82dc-7a1403ce1b82

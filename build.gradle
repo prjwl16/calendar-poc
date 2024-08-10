@@ -1,0 +1,95 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id('io.ebean') version '13.25.2'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group 'com.server'
+version '1.0.0-SNAPSHOT'
+
+ext {
+    vertxVersion = '4.5.1'
+    junitJupiterVersion = '5.9.1'
+    rxJavaVersion = '3.1.8'
+    lombokVersion = '1.18.30'
+    gsonVersion = '2.10.1'
+    nettyVersion = '4.1.91.Final'
+}
+
+dependencies {
+
+    //vertx
+    implementation "io.vertx:vertx-web-client:$vertxVersion"
+    implementation "io.vertx:vertx-web:$vertxVersion"
+    implementation 'io.vertx:vertx-auth-oauth2:4.5.1'
+    implementation "io.vertx:vertx-pg-client:4.5.1"
+    implementation 'org.postgresql:postgresql:42.7.1'
+
+    //Ebean
+    implementation "io.ebean:ebean-core:13.25.2"
+    implementation "io.ebean:ebean-datasource:8.11"
+    implementation "io.ebean:ebean-platform-postgres:13.25.2"
+    implementation 'io.ebean:ebean-ddl-generator:13.25.2'
+
+    //JAXB -- needed for data model migration
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+    implementation 'javax.xml.bind:jaxb-api:2.3.3'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.3'
+
+    //Network
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //reactive
+    implementation "io.reactivex.rxjava3:rxjava:$rxJavaVersion"
+
+    //Utils
+    implementation "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "io.netty:netty-all:4.1.73.Final"
+    implementation 'commons-io:commons-io:2.15.1'
+    implementation 'io.vertx:vertx-auth-jwt:4.5.1'
+    implementation 'org.slf4j:slf4j-api:2.0.11'
+    implementation 'org.slf4j:slf4j-simple:2.0.11'
+
+    //gradle
+    implementation 'com.google.api-client:google-api-client:2.6.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.36.0'
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev411-1.25.0'
+
+}
+
+mainClassName = 'Application'
+
+sourceSets {
+    main {
+        resources.srcDirs = ['src/main/resources'] as Iterable<?>
+    }
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': mainClassName,
+            'Main-Verticle': project.absoluteProjectPath('src/main/java/ttmm/Application.java'))
+    }
+}
+
+shadowJar {
+    archiveFileName = "server.jar"
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+}
+
+
+test {
+    useJUnitPlatform()
+}
+

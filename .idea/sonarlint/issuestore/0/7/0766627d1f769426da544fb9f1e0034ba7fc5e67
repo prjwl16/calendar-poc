@@ -1,0 +1,9 @@
+
+Š
+java:S1104"NMake db a static final constant or non-public and provide accessors if needed.(İºÒJ$a502b489-9fa0-45ad-a72b-c5e707a42a07
+†	java:S112+"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚ÒéüÿÿÿÿJ$f7a57975-4fec-4897-991d-2eb7bf8a8884
+†	java:S112@"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚ÒéüÿÿÿÿJ$0d19c176-55df-4f5f-be85-045a090c3905
+_
+java:S3066"#Lower the visibility of this field.(İºÒJ$71854777-68b6-44dd-9a3f-1a7d1c9b8a9c
+ë
+java:S6548"®An Enum-based Singleton implementation was detected. Make sure the use of the Singleton pattern is required and an Enum-based implementation is the right one for the context.(—ğÁ›J$c51c4a6b-8e87-48de-91b6-d8607471c36c

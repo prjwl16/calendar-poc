@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="accounts" pkName="pk_accounts">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar"/>
+            <column name="currency" type="varchar(3)" defaultValue="'INR'" checkConstraint="check ( currency in ('INR','USD'))" checkConstraintName="ck_accounts_currency"/>
+            <column name="balance" type="varchar"/>
+            <column name="type" type="varchar(18)" defaultValue="'CASH'" checkConstraint="check ( type in ('CASH','CREDIT_CARD','DEBIT_CARD','BANK_ACCOUNT','INVESTMENT_ACCOUNT','LOAN','OTHER'))" checkConstraintName="ck_accounts_type"/>
+            <column name="is_default" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="user_id" type="bigint" references="users.id" foreignKeyName="fk_accounts_user_id" foreignKeyIndex="ix_accounts_user_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="categories" pkName="pk_categories">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar" notnull="true"/>
+            <column name="description" type="varchar"/>
+            <column name="avatar" type="varchar"/>
+            <column name="user_id" type="bigint" references="users.id" foreignKeyName="fk_categories_user_id" foreignKeyIndex="ix_categories_user_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="friendships" pkName="pk_friendships">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="friendship_id" type="varchar"/>
+            <column name="user_id" type="bigint"/>
+            <column name="friend_id" type="bigint"/>
+            <column name="status" type="varchar(8)" defaultValue="'PENDING'" checkConstraint="check ( status in ('PENDING','ACCEPTED','REJECTED','BLOCKED'))" checkConstraintName="ck_friendships_status"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+            <uniqueConstraint name="uq_friendships_friendship_id" columnNames="friendship_id" oneToOne="false" nullableColumns="friendship_id"/>
+        </createTable>
+        <createTable name="groups" pkName="pk_groups">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="name" type="varchar" notnull="true"/>
+            <column name="description" type="varchar"/>
+            <column name="avatar" type="varchar"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="recurring_transactions" pkName="pk_recurring_transactions">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="start_date" type="date"/>
+            <column name="end_date" type="date"/>
+            <column name="frequency" type="integer" notnull="true"/>
+            <column name="next_execution_date" type="date"/>
+            <column name="interval" type="varchar"/>
+            <column name="is_active" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="recurring_period" type="varchar"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="settlements" pkName="pk_settlements">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="amount" type="double" notnull="true"/>
+            <column name="currency" type="varchar(3)" defaultValue="'INR'" notnull="true" checkConstraint="check ( currency in ('INR','USD'))" checkConstraintName="ck_settlements_currency"/>
+            <column name="date" type="date"/>
+            <column name="payer_id" type="bigint" references="users.id" foreignKeyName="fk_settlements_payer_id" foreignKeyIndex="ix_settlements_payer_id"/>
+            <column name="receiver_id" type="bigint" references="users.id" foreignKeyName="fk_settlements_receiver_id" foreignKeyIndex="ix_settlements_receiver_id"/>
+            <column name="group_id" type="bigint" references="groups.id" foreignKeyName="fk_settlements_group_id" foreignKeyIndex="ix_settlements_group_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="transactions" pkName="pk_transactions">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="description" type="varchar"/>
+            <column name="amount" type="double" notnull="true"/>
+            <column name="date" type="date"/>
+            <column name="type" type="varchar(13)" defaultValue="'EXPENSE'" notnull="true" checkConstraint="check ( type in ('INCOME','EXPENSE','SELF_TRANSFER','INVESTMENT'))" checkConstraintName="ck_transactions_type"/>
+            <column name="currency" type="varchar(3)" defaultValue="'INR'" notnull="true" checkConstraint="check ( currency in ('INR','USD'))" checkConstraintName="ck_transactions_currency"/>
+            <column name="is_shared" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="is_recurring" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="recurring_id" type="bigint" references="recurring_transactions.id" foreignKeyName="fk_transactions_recurring_id" foreignKeyIndex="ix_transactions_recurring_id"/>
+            <column name="category_id" type="bigint" references="categories.id" foreignKeyName="fk_transactions_category_id" foreignKeyIndex="ix_transactions_category_id"/>
+            <column name="account_id" type="bigint" references="accounts.id" foreignKeyName="fk_transactions_account_id" foreignKeyIndex="ix_transactions_account_id"/>
+            <column name="group_id" type="bigint" references="groups.id" foreignKeyName="fk_transactions_group_id" foreignKeyIndex="ix_transactions_group_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="users" pkName="pk_users">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="first_name" type="varchar"/>
+            <column name="last_name" type="varchar"/>
+            <column name="email" type="varchar" notnull="true" unique="uq_users_email"/>
+            <column name="avatar" type="varchar"/>
+            <column name="google_auth_id" type="varchar"/>
+            <column name="role" type="varchar(5)" defaultValue="'USER'" notnull="true" checkConstraint="check ( role in ('USER','ADMIN'))" checkConstraintName="ck_users_role"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+            <uniqueConstraint name="uq_users_email" columnNames="email" oneToOne="false" nullableColumns=""/>
+        </createTable>
+        <createTable name="user_groups" pkName="pk_user_groups">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="user_id" type="bigint" references="users.id" foreignKeyName="fk_user_groups_user_id" foreignKeyIndex="ix_user_groups_user_id"/>
+            <column name="group_id" type="bigint" references="groups.id" foreignKeyName="fk_user_groups_group_id" foreignKeyIndex="ix_user_groups_group_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+        <createTable name="user_transactions" pkName="pk_user_transactions">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="creator_id" type="bigint" references="users.id" foreignKeyName="fk_user_transactions_creator_id" foreignKeyIndex="ix_user_transactions_creator_id"/>
+            <column name="receiver_id" type="bigint" references="users.id" foreignKeyName="fk_user_transactions_receiver_id" foreignKeyIndex="ix_user_transactions_receiver_id"/>
+            <column name="payer_id" type="bigint" references="users.id" foreignKeyName="fk_user_transactions_payer_id" foreignKeyIndex="ix_user_transactions_payer_id"/>
+            <column name="transaction_id" type="bigint" references="transactions.id" foreignKeyName="fk_user_transactions_transaction_id" foreignKeyIndex="ix_user_transactions_transaction_id"/>
+            <column name="created_at" type="timestamp" notnull="true"/>
+            <column name="updated_at" type="timestamp" notnull="true"/>
+            <column name="is_deleted" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>

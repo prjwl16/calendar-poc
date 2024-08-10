@@ -1,0 +1,5 @@
+
+†	java:S112""FDefine and throw a dedicated exception instead of using a generic one.(šÃÜ¦úÿÿÿÿJ$4eec9bf5-96ef-4dce-a765-667c591f4c1f
+	java:S112*"FDefine and throw a dedicated exception instead of using a generic one.(ÔÓ›ÑJ$03f70230-1675-4c68-bc70-40d73e796e1b
+ë
+java:S6548"®An Enum-based Singleton implementation was detected. Make sure the use of the Singleton pattern is required and an Enum-based implementation is the right one for the context.(ÆÖÚJ$7b6bc2bf-1b81-47f9-947f-8460a84d58be
