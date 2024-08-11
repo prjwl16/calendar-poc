@@ -46,6 +46,7 @@ public class Application extends AbstractVerticle {
                     configPath = "/app/main/prod.config.json";
                 }else{
                     log.info("Running in local");
+                    log.info("Hello {}",location.getAbsoluteFile());
                     configPath = "src/main/resources/config.json";
                 }
                 File file = new File(configPath);
